@@ -1,0 +1,443 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Nome da API",
+      "version": "1.0.0",
+      "description": "Descrição da API"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:8080",
+        "description": "Servidor local"
+      }
+    ],
+    "paths": {
+      "/cadastrarPessoa": {
+        "post": {
+          "summary": "Cadastrar uma nova pessoa",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserInput"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Pessoa cadastrada com sucesso"
+            },
+            "400": {
+              "description": "Tipo de usuário inválido"
+            },
+            "500": {
+              "description": "Erro interno do servidor"
+            }
+          }
+        }
+      },
+      "/editaPessoa/{id}": {
+        "put": {
+          "summary": "Editar uma pessoa existente",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "ID da pessoa",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserInput"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Pessoa editada com sucesso"
+            },
+            "400": {
+              "description": "Tipo de usuário inválido"
+            },
+            "500": {
+              "description": "Erro interno do servidor"
+            }
+          }
+        }
+      },
+      "/deletarPessoa/{id}": {
+        "delete": {
+          "summary": "Deletar uma pessoa",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "ID da pessoa",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Usuário deletado com sucesso"
+            },
+            "400": {
+              "description": "Tipo de usuário inválido"
+            },
+            "404": {
+              "description": "Usuário não encontrado"
+            },
+            "500": {
+              "description": "Erro interno do servidor"
+            }
+          }
+        }
+      },
+      "/candidatos": {
+        "get": {
+          "summary": "Obter lista de candidatos",
+          "responses": {
+            "200": {
+              "description": "Lista de candidatos obtida com sucesso"
+            },
+            "500": {
+              "description": "Erro interno do servidor"
+            }
+          }
+        }
+      },
+      "/cadastrarProjeto": {
+        "post": {
+          "summary": "Cadastrar um novo projeto",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectInput"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Projeto cadastrado com sucesso"
+            },
+            "400": {
+              "description": "Erro de validação do usuário ou tipo inválido"
+            },
+            "404": {
+              "description": "Usuário responsável não encontrado"
+            },
+            "500": {
+              "description": "Erro interno do servidor"
+            }
+          }
+        }
+      },
+      "/editarProjeto/{id}": {
+        "put": {
+          "summary": "Editar um projeto existente",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "ID do projeto",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectInput"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Projeto editado com sucesso"
+            },
+            "400": {
+              "description": "Erro de validação do usuário ou usuário não é responsável"
+            },
+            "403": {
+              "description": "Usuário não é responsável pelo projeto"
+            },
+            "404": {
+              "description": "Projeto não encontrado"
+            },
+            "500": {
+              "description": "Erro interno do servidor"
+            }
+          }
+        }
+      },
+      "/deletarProjeto/{id}": {
+        "delete": {
+          "summary": "Deletar um projeto",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "ID do projeto",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Projeto deletado com sucesso"
+            },
+            "404": {
+              "description": "Projeto não encontrado"
+            },
+            "403": {
+              "description": "Não é possível excluir projetos com candidaturas"
+            },
+            "500": {
+              "description": "Erro interno do servidor"
+            }
+          }
+        }
+      },
+      "/projetos": {
+        "get": {
+          "summary": "Obter lista de projetos",
+          "responses": {
+            "200": {
+              "description": "Lista de projetos obtida com sucesso"
+            },
+            "500": {
+              "description": "Erro interno do servidor"
+            }
+          }
+        }
+      },
+      "/candidatosInteressados": {
+        "get": {
+          "summary": "Obter lista de candidatos interessados",
+          "responses": {
+            "200": {
+              "description": "Lista de candidatos obtida com sucesso"
+            },
+            "500": {
+              "description": "Erro interno do servidor"
+            }
+          }
+        }
+      },
+      "/candidatar": {
+        "post": {
+          "summary": "Candidatar-se a um projeto",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CandidaturaInput"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Candidatura realizada com sucesso"
+            },
+            "400": {
+              "description": "Usuário já se candidatou a esse projeto"
+            },
+            "404": {
+              "description": "Projeto não encontrado"
+            },
+            "500": {
+              "description": "Erro interno do servidor"
+            }
+          }
+        }
+      },
+      "/selecionarCandidato": {
+        "post": {
+          "summary": "Selecionar um candidato",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelecionarCandidatoInput"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Candidato selecionado com sucesso"
+            },
+            "500": {
+              "description": "Ocorreu um erro ao selecionar o candidato"
+            }
+          }
+        }
+      },
+      "/candidatosSelecionados/{idProjeto}": {
+        "get": {
+          "summary": "Obter lista de candidatos selecionados",
+          "parameters": [
+            {
+              "name": "idProjeto",
+              "in": "path",
+              "description": "ID do projeto",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Lista de candidatos selecionados obtida com sucesso"
+            },
+            "500": {
+              "description": "Ocorreu um erro ao listar os candidatos selecionados"
+            }
+          }
+        }
+      }
+    },
+    "components": {
+        "schemas": {
+          "UserInput": {
+            "type": "object",
+            "properties": {
+              "NameUser": {
+                "type": "string"
+              },
+              "Age": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "CPF": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "type": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            "required": [
+              "NameUser",
+              "Age",
+              "CPF",
+              "email",
+              "type"
+            ]
+          },
+          "ProjectInput": {
+            "type": "object",
+            "properties": {
+              "ProjectName": {
+                "type": "string"
+              },
+              "ProjectDescription": {
+                "type": "string"
+              },
+              "YearStart": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "YearEnd": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "IdUserResponsible": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            "required": [
+              "ProjectName",
+              "ProjectDescription",
+              "YearStart",
+              "YearEnd",
+              "IdUserResponsible"
+            ]
+          },
+          "CandidaturaInput": {
+            "type": "object",
+            "properties": {
+              "idProjeto": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            "required": [
+              "idProjeto"
+            ]
+          },
+          "SelecionarCandidatoInput": {
+            "type": "object",
+            "properties": {
+              "idCandidato": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "idProjeto": {
+                "type": "integer",
+                "format": "int32"
+              }
+            },
+            "required": [
+              "idCandidato",
+              "idProjeto"
+            ]
+          },
+          "ApplicationInput": {
+            "type": "object",
+            "properties": {
+              "IdUser": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "IdProject": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "Stats": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "IdUser",
+              "IdProject",
+              "Stats"
+            ]
+          }
+        }
+      }
+    }
+    
