@@ -33,10 +33,11 @@ model Project {
 }
 
 model Application {
-  IdApplication Int     @id @default(autoincrement())
+  IdApplication Int      @default(autoincrement())
   IdUser        Int     // Chave estrangeira referenciando o IdUser em Usuario
   IdProject     Int     // Chave estrangeira referenciando o IdProject em Project
-  Stats         String
+  Stats         Int
   user          User @relation("UserToApplication", fields: [IdUser], references: [IdUser])
   project       Project @relation("ProjectToApplication", fields: [IdProject], references: [IdProject])
+  @@id([IdUser,IdProject])
 }

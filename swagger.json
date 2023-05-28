@@ -12,9 +12,50 @@
       }
     ],
     "paths": {
+      "/token/{userId}": {
+        "get": {
+          "summary": "Gerar token de autenticação para um usuário",
+          "tags": ["Autenticação"],
+          "parameters": [
+            {
+              "name": "userId",
+              "in": "path",
+              "description": "ID do usuário",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Token de autenticação gerado com sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "token": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Usuário não encontrado"
+            },
+            "500": {
+              "description": "Erro interno do servidor"
+            }
+          }
+        }
+      },
       "/cadastrarPessoa": {
         "post": {
           "summary": "Cadastrar uma nova pessoa",
+          "tags": ["Pessoas"],
           "requestBody": {
             "content": {
               "application/json": {
@@ -24,6 +65,11 @@
               }
             }
           },
+          "security": [
+            {
+              "BearerAuth": []
+            }
+          ],
           "responses": {
             "201": {
               "description": "Pessoa cadastrada com sucesso"
@@ -40,6 +86,7 @@
       "/editaPessoa/{id}": {
         "put": {
           "summary": "Editar uma pessoa existente",
+          "tags": ["Pessoas"],
           "parameters": [
             {
               "name": "id",
@@ -50,6 +97,11 @@
                 "type": "integer",
                 "format": "int32"
               }
+            }
+          ],
+          "security": [
+            {
+              "BearerAuth": []
             }
           ],
           "requestBody": {
@@ -77,6 +129,7 @@
       "/deletarPessoa/{id}": {
         "delete": {
           "summary": "Deletar uma pessoa",
+          "tags": ["Pessoas"],
           "parameters": [
             {
               "name": "id",
@@ -87,6 +140,11 @@
                 "type": "integer",
                 "format": "int32"
               }
+            }
+          ],
+          "security": [
+            {
+              "BearerAuth": []
             }
           ],
           "responses": {
@@ -105,22 +163,15 @@
           }
         }
       },
-      "/candidatos": {
-        "get": {
-          "summary": "Obter lista de candidatos",
-          "responses": {
-            "200": {
-              "description": "Lista de candidatos obtida com sucesso"
-            },
-            "500": {
-              "description": "Erro interno do servidor"
-            }
-          }
-        }
-      },
       "/cadastrarProjeto": {
         "post": {
           "summary": "Cadastrar um novo projeto",
+          "tags": ["Projetos"],
+          "security": [
+            {
+              "BearerAuth": []
+            }
+          ],
           "requestBody": {
             "required": true,
             "content": {
@@ -150,6 +201,7 @@
       "/editarProjeto/{id}": {
         "put": {
           "summary": "Editar um projeto existente",
+          "tags": ["Projetos"],
           "parameters": [
             {
               "name": "id",
@@ -160,6 +212,11 @@
                 "type": "integer",
                 "format": "int32"
               }
+            }
+          ],
+          "security": [
+            {
+              "BearerAuth": []
             }
           ],
           "requestBody": {
@@ -194,6 +251,7 @@
       "/deletarProjeto/{id}": {
         "delete": {
           "summary": "Deletar um projeto",
+          "tags": ["Projetos"],
           "parameters": [
             {
               "name": "id",
@@ -204,6 +262,11 @@
                 "type": "integer",
                 "format": "int32"
               }
+            }
+          ],
+          "security": [
+            {
+              "BearerAuth": []
             }
           ],
           "responses": {
@@ -225,6 +288,7 @@
       "/projetos": {
         "get": {
           "summary": "Obter lista de projetos",
+          "tags": ["Projetos"],
           "responses": {
             "200": {
               "description": "Lista de projetos obtida com sucesso"
@@ -235,22 +299,10 @@
           }
         }
       },
-      "/candidatosInteressados": {
-        "get": {
-          "summary": "Obter lista de candidatos interessados",
-          "responses": {
-            "200": {
-              "description": "Lista de candidatos obtida com sucesso"
-            },
-            "500": {
-              "description": "Erro interno do servidor"
-            }
-          }
-        }
-      },
       "/candidatar": {
         "post": {
           "summary": "Candidatar-se a um projeto",
+          "tags": ["Candidaturas"],
           "requestBody": {
             "required": true,
             "content": {
@@ -280,6 +332,12 @@
       "/selecionarCandidato": {
         "post": {
           "summary": "Selecionar um candidato",
+          "tags": ["Candidaturas"],
+          "security": [
+            {
+              "BearerAuth": []
+            }
+          ],
           "requestBody": {
             "required": true,
             "content": {
@@ -300,9 +358,69 @@
           }
         }
       },
+      "/candidatos": {
+        "get": {
+          "summary": "Obter lista de candidatos",
+          "tags": ["Candidaturas"],
+          "security": [
+            {
+              "BearerAuth": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Lista de candidatos obtida com sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "candidatos": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/UserInput"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Usuário sem permissão para acessar esta rota"
+            },
+            "404": {
+              "description": "Usuário não encontrado"
+            },
+            "500": {
+              "description": "Erro interno do servidor"
+            }
+          }
+        }
+      },
+      "/candidatosInteressados": {
+        "get": {
+          "summary": "Obter lista de candidatos interessados",
+          "tags": ["Candidaturas"],
+          "security": [
+            {
+              "BearerAuth": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Lista de candidatos obtida com sucesso"
+            },
+            "500": {
+              "description": "Erro interno do servidor"
+            }
+          }
+        }
+      },
       "/candidatosSelecionados/{idProjeto}": {
         "get": {
           "summary": "Obter lista de candidatos selecionados",
+          "tags": ["Candidaturas"],
           "parameters": [
             {
               "name": "idProjeto",
@@ -393,6 +511,10 @@
               "idProjeto": {
                 "type": "integer",
                 "format": "int32"
+              },
+              "idCandidato":{
+                "type": "integer",
+                "format": "int32"
               }
             },
             "required": [
@@ -436,6 +558,14 @@
               "IdProject",
               "Stats"
             ]
+          }
+        },
+        "securitySchemes": {
+          "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header",
+            "bearerFormat": "JWT"
           }
         }
       }
